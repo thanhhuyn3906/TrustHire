@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TrustHire - Nền tảng Tuyển dụng Xác thực & AI 3.0</title>
+    <title>TrustHire - Tuyển dụng 4.0 & AI Matching</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -14,20 +14,32 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#0044CC', secondary: '#00CCFF', accent: '#FFD700', bgLight: '#F0F9FF'
+                        primary: '#0044CC', secondary: '#00CCFF', accent: '#FFD700', bgLight: '#F0F9FF', dark: '#1e293b'
                     },
-                    fontFamily: { 'undertale': ['"VT323"', 'monospace'], 'sans': ['"Inter"', 'sans-serif'] }
+                    fontFamily: {
+                        'undertale': ['"VT323"', 'monospace'], 'sans': ['"Inter"', 'sans-serif']
+                    }
                 }
             }
         }
     </script>
+
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; }
         .page-section { display: none; animation: fadeIn 0.4s ease-out; }
         .page-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        /* Style cho Checkbox chính sách */
         .custom-checkbox { accent-color: #0044CC; width: 18px; height: 18px; cursor: pointer; }
+        
+        /* Hiệu ứng che mờ cho khách chưa đăng nhập */
+        .blur-text { 
+            color: transparent; 
+            text-shadow: 0 0 10px rgba(0,0,0,0.5); 
+            user-select: none; 
+            background: rgba(0,0,0,0.1);
+            border-radius: 4px;
+            padding: 0 4px;
+        }
     </style>
 </head>
 <body class="text-gray-700 relative">
@@ -35,21 +47,24 @@
     <header class="bg-white shadow-md sticky top-0 z-50">
         <div class="container mx-auto px-4 h-20 flex items-center justify-between">
             <a href="#" onclick="switchPage('home')" class="flex items-center gap-2 group">
-                <div class="font-undertale text-5xl text-primary font-bold border-2 border-primary px-2 rounded group-hover:bg-primary group-hover:text-white transition">HR</div>
+                <div class="font-undertale text-5xl text-primary font-bold border-2 border-primary px-2 rounded group-hover:bg-primary group-hover:text-white transition cursor-pointer">HR</div>
                 <div class="hidden lg:block">
-                    <h1 class="text-xl font-bold text-gray-800">TrustHire</h1>
-                    <p class="text-[10px] text-secondary font-bold uppercase tracking-widest">Tuyển dụng 4.0</p>
+                    <h1 class="text-xl font-bold text-gray-800 tracking-tight">TrustHire</h1>
+                    <p class="text-[10px] text-secondary font-bold uppercase tracking-widest">Tiếp lợi thế</p>
                 </div>
             </a>
+
             <nav class="hidden md:flex gap-6 font-semibold text-gray-600">
-                <a href="#" onclick="switchPage('home')" class="hover:text-primary">Việc làm</a>
-                <a href="#" onclick="switchPage('cv-hub')" class="hover:text-primary">Hồ sơ & CV</a>
-                <a href="#" class="hover:text-primary">Cẩm nang</a>
+                <a href="#" onclick="switchPage('home')" class="hover:text-primary transition">Việc làm</a>
+                <a href="#" onclick="switchPage('cv-hub')" class="hover:text-primary transition">Hồ sơ & CV</a>
+                <a href="#" class="hover:text-primary transition">Công ty</a>
             </nav>
+
             <div class="flex items-center gap-3" id="auth-buttons">
-                <button onclick="openModal('login')" class="text-primary font-bold hover:bg-blue-50 px-4 py-2 rounded">Đăng nhập</button>
-                <button onclick="openModal('register')" class="bg-primary text-white font-bold px-5 py-2 rounded hover:bg-blue-700 shadow-lg shadow-cyan-500/30">Đăng ký</button>
+                <button onclick="openModal('auth-modal', 'login')" class="text-primary font-bold hover:bg-blue-50 px-4 py-2 rounded transition">Đăng nhập</button>
+                <button onclick="openModal('auth-modal', 'register')" class="bg-primary text-white font-bold px-5 py-2 rounded hover:bg-blue-800 transition shadow-lg shadow-cyan-500/30">Đăng ký</button>
             </div>
+
             <div id="user-profile" class="hidden flex items-center gap-3">
                 <div class="text-right hidden lg:block">
                     <div id="user-name-display" class="font-bold text-gray-800">User</div>
@@ -57,9 +72,8 @@
                 </div>
                 <div class="relative group">
                     <img src="https://ui-avatars.com/api/?name=User&background=00CCFF&color=fff" class="w-10 h-10 rounded-full cursor-pointer border-2 border-primary">
-                    <div class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-xl py-2 hidden group-hover:block border border-gray-100">
-                        <a href="#" onclick="showKYC()" class="block px-4 py-2 hover:bg-gray-100 text-red-600 font-bold"><i class="fa-solid fa-id-card"></i> Xác thực CCCD (Nâng Level 2)</a>
-                        <a href="#" onclick="switchPage('recruiter-flow')" class="block px-4 py-2 hover:bg-gray-100 font-bold text-blue-600"><i class="fa-solid fa-briefcase"></i> Kênh Nhà tuyển dụng</a>
+                    <div class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-xl py-2 hidden group-hover:block border border-gray-100 animate-fadeIn">
+                        <a href="#" onclick="showKYC()" class="block px-4 py-2 hover:bg-gray-100 text-red-600 font-bold"><i class="fa-solid fa-id-card mr-2"></i> Xác thực CCCD (Up Level 2)</a>
                         <div class="border-t my-1"></div>
                         <a href="#" onclick="logout()" class="block px-4 py-2 hover:bg-gray-100">Đăng xuất</a>
                     </div>
@@ -69,32 +83,29 @@
     </header>
 
     <main id="home-page" class="page-section active">
-        <div id="ai-results" class="hidden bg-gradient-to-r from-blue-900 to-primary text-white py-8 transition-all border-b-4 border-accent">
-            <div class="container mx-auto px-4">
+        
+        <div id="ai-results" class="hidden bg-gradient-to-r from-[#003399] to-primary text-white py-8 border-b-4 border-secondary relative overflow-hidden">
+            <div class="container mx-auto px-4 relative z-10">
                 <div class="flex justify-between items-start mb-6">
-                    <div class="flex gap-4">
-                        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-3xl animate-pulse shadow-lg shadow-cyan-500/50">
-                            <i class="fa-solid fa-robot"></i>
+                    <div class="flex gap-4 items-center">
+                        <div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center text-3xl animate-pulse shadow-lg shadow-cyan-400/50 border border-secondary">
+                            <i class="fa-solid fa-robot text-secondary"></i>
                         </div>
                         <div>
-                            <h2 class="text-2xl font-bold font-undertale tracking-wide text-secondary">AI RECRUITER</h2>
-                            <p class="text-sm text-gray-200 mt-1">Dựa trên CV <span id="cv-name-analyzed" class="font-bold text-accent">---</span> của bạn.</p>
-                            <p class="text-xs text-gray-300 italic">"Tôi đã tìm thấy những cơ hội tốt nhất!"</p>
+                            <h2 class="text-2xl font-bold font-undertale tracking-wide text-secondary">AI MATCHING</h2>
+                            <p class="text-sm text-gray-200">Đã phân tích hồ sơ: <span id="cv-analyzed-name" class="font-bold text-accent uppercase">---</span></p>
+                            <p id="ai-status-text" class="text-xs text-gray-300 italic mt-1">"Tìm thấy công việc phù hợp 99%..."</p>
                         </div>
                     </div>
-                    <button onclick="closeAI()" class="text-white hover:text-red-400"><i class="fa-solid fa-times fa-lg"></i></button>
+                    <button onclick="document.getElementById('ai-results').classList.add('hidden')" class="text-white hover:text-red-400"><i class="fa-solid fa-xmark fa-xl"></i></button>
                 </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="ai-job-cards">
-                    </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="ai-job-cards"></div>
 
-                <div class="mt-8 pt-6 border-t border-white/20">
-                    <label class="text-sm font-bold text-cyan-300 block mb-2"><i class="fa-solid fa-wand-magic-sparkles"></i> Bạn muốn thay đổi hướng tìm việc?</label>
+                <div class="mt-6 pt-6 border-t border-white/20">
+                    <label class="text-sm font-bold text-secondary block mb-2"><i class="fa-solid fa-pen-to-square"></i> Thay đổi mong muốn?</label>
                     <div class="flex gap-2 max-w-2xl">
-                        <input type="text" id="user-desire-input" placeholder="Nhập mong muốn (VD: Gia sư, Marketing...)" class="w-full p-3 rounded text-gray-800 focus:outline-none focus:ring-2 focus:ring-accent">
-                        <button onclick="handleUserDesireChange()" class="bg-accent text-blue-900 font-bold px-6 py-3 rounded hover:bg-yellow-400 transition shadow-lg">
-                            AI Tìm lại
-                        </button>
+                        <input type="text" id="user-desire-input" placeholder="Nhập nghề nghiệp (VD: Gia sư, Marketing...)" class="w-full p-3 rounded text-gray-900 focus:outline-none">
+                        <button onclick="handleUserDesireChange()" class="bg-secondary text-blue-900 font-bold px-6 py-3 rounded hover:bg-white transition shadow-lg whitespace-nowrap">AI Tìm lại</button>
                     </div>
                 </div>
             </div>
@@ -102,27 +113,24 @@
 
         <div class="bg-bgLight py-6 border-b border-gray-200 sticky top-20 z-40 shadow-sm">
             <div class="container mx-auto px-4">
-                <div class="grid grid-cols-1 md:grid-cols-5 gap-3 bg-white p-4 rounded-lg shadow-lg">
-                    <div class="md:col-span-2 flex items-center px-3 border border-gray-200 rounded focus-within:border-secondary transition">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-3 bg-white p-4 rounded-lg shadow-lg">
+                    <div class="md:col-span-4 flex items-center px-3 border border-gray-200 rounded focus-within:border-primary transition">
                         <i class="fa-solid fa-magnifying-glass text-gray-400 mr-3"></i>
-                        <input type="text" id="filter-keyword" placeholder="Tìm công việc, công ty..." class="w-full py-2 outline-none">
+                        <input type="text" id="filter-keyword" placeholder="Tìm việc làm (Mixue, Pizza Hut...)" class="w-full py-2 outline-none">
                     </div>
-                    <div class="flex items-center px-3 border border-gray-200 rounded focus-within:border-secondary">
-                        <i class="fa-solid fa-map-location-dot text-gray-400 mr-3"></i>
-                        <select id="filter-location" class="w-full py-2 outline-none bg-transparent text-sm cursor-pointer">
-                            <option value="">63 Tỉnh/Thành</option>
-                        </select>
+                    <div class="md:col-span-3 flex items-center px-3 border border-gray-200 rounded focus-within:border-primary">
+                        <i class="fa-solid fa-location-dot text-gray-400 mr-3"></i>
+                        <select id="filter-location" class="w-full py-2 outline-none bg-transparent text-sm"><option value="">Tất cả địa điểm</option></select>
                     </div>
-                    <div class="flex items-center px-3 border border-gray-200 rounded focus-within:border-secondary">
+                    <div class="md:col-span-3 flex items-center px-3 border border-gray-200 rounded focus-within:border-primary">
                         <i class="fa-solid fa-sack-dollar text-gray-400 mr-3"></i>
-                        <select id="filter-salary" class="w-full py-2 outline-none bg-transparent text-sm cursor-pointer">
+                        <select id="filter-salary" class="w-full py-2 outline-none bg-transparent text-sm">
                             <option value="">Mức lương</option>
                             <option value="duoi-10">Dưới 10 triệu</option>
                             <option value="10-20">10 - 20 triệu</option>
-                            <option value="tren-20">Trên 20 triệu</option>
                         </select>
                     </div>
-                    <button onclick="applyFilters()" class="bg-secondary text-white font-bold rounded hover:bg-primary transition shadow-md">Tìm kiếm</button>
+                    <button onclick="applyFilters()" class="md:col-span-2 bg-primary text-white font-bold rounded hover:bg-blue-800 transition">Tìm kiếm</button>
                 </div>
             </div>
         </div>
@@ -132,11 +140,11 @@
                 </div>
             <div class="space-y-6">
                 <div class="bg-white rounded-xl shadow border border-gray-100 p-6">
-                    <h3 class="font-bold text-gray-800 mb-4 border-l-4 border-primary pl-2">Gợi ý từ AI</h3>
-                    <p class="text-sm text-gray-500 mb-4">Tải CV lên để AI phân tích kỹ năng và đề xuất công việc chính xác 99%.</p>
-                    <button onclick="switchPage('cv-hub')" class="w-full bg-primary text-white font-bold py-2 rounded hover:bg-blue-800">Tải CV Ngay</button>
+                    <h3 class="font-bold text-gray-800 mb-2">Tạo CV TrustHire</h3>
+                    <p class="text-sm text-gray-500 mb-4">Kết nối 500+ Nhà tuyển dụng.</p>
+                    <button onclick="switchPage('cv-hub')" class="w-full bg-secondary text-white font-bold py-2 rounded hover:bg-cyan-600 transition">Tạo CV Ngay</button>
                 </div>
-                <img src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=500&q=60" class="rounded-xl shadow w-full">
+                <img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=500&q=60" class="rounded-xl shadow w-full">
             </div>
         </div>
     </main>
@@ -144,76 +152,31 @@
     <main id="cv-hub-page" class="page-section hidden bg-gray-50 min-h-screen py-10">
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-center text-primary mb-2">Trung tâm CV TrustHire</h2>
-            <p class="text-center text-gray-500 mb-10">AI hỗ trợ phân tích và tối ưu hóa hồ sơ của bạn</p>
+            <p class="text-center text-gray-500 mb-10">Tải lên CV của bạn để AI phân tích</p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <div class="bg-white p-8 rounded-xl shadow-lg border-2 border-dashed border-gray-300 hover:border-secondary transition text-center group relative">
-                    <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-secondary group-hover:text-white transition">
-                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-primary group-hover:text-white"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800">Tải CV có sẵn</h3>
-                    <p class="text-sm text-gray-500 mt-2">Kéo thả hoặc chọn file PDF/DOCX</p>
-                    
-                    <div class="mt-6 space-y-2">
-                        <p class="text-xs font-bold text-red-500 uppercase">Demo: Chọn kịch bản tải lên</p>
-                        <button onclick="simulateUpload('bach')" class="w-full border border-gray-300 py-2 rounded text-sm hover:bg-gray-100 text-left px-4 flex justify-between items-center">
-                            <span><i class="fa-regular fa-file-pdf mr-2 text-red-500"></i> CV_NguyenVanBach.pdf</span>
-                            <span class="text-xs bg-gray-200 px-2 rounded">Giáo dục</span>
-                        </button>
-                        <button onclick="simulateUpload('thao')" class="w-full border border-gray-300 py-2 rounded text-sm hover:bg-gray-100 text-left px-4 flex justify-between items-center">
-                            <span><i class="fa-regular fa-file-image mr-2 text-blue-500"></i> CV_LeThiThao.jpg</span>
-                            <span class="text-xs bg-gray-200 px-2 rounded">Sales/Design</span>
-                        </button>
-                    </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg border-2 border-dashed border-gray-300 hover:border-secondary transition text-center group">
+                    <label for="cv-upload" class="cursor-pointer block">
+                        <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-secondary group-hover:text-white transition">
+                            <i class="fa-solid fa-cloud-arrow-up text-3xl text-primary group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">Tải CV từ máy tính</h3>
+                        <p class="text-sm text-gray-500 mt-2 mb-4">Hỗ trợ PDF, JPG, PNG, DOCX</p>
+                        <div class="bg-primary text-white px-4 py-2 rounded text-sm font-bold inline-block hover:bg-blue-800">
+                            <i class="fa-solid fa-folder-open mr-2"></i> Chọn File
+                        </div>
+                    </label>
+                    <input type="file" id="cv-upload" class="hidden" onchange="handleFileUpload(this)">
+                    <p class="text-xs text-red-500 mt-4 italic">*Lưu ý test: Đặt tên file có chữ "Bach" hoặc "Thao" để AI nhận diện.</p>
                 </div>
 
-                <div class="bg-white p-8 rounded-xl shadow-lg border border-transparent hover:border-secondary transition cursor-pointer text-center group">
-                    <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-500 group-hover:text-white transition">
-                        <i class="fa-solid fa-wand-magic-sparkles text-3xl text-purple-600 group-hover:text-white"></i>
+                <div class="bg-white p-8 rounded-xl shadow-lg border border-transparent hover:border-secondary transition text-center">
+                    <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa-solid fa-wand-magic-sparkles text-3xl text-purple-600"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800">Dùng mẫu 2026</h3>
-                    <p class="text-sm text-gray-500 mt-2">Kho giao diện CV chuẩn ATS, Harvard, Modern.</p>
-                    <button class="mt-4 text-primary font-bold hover:underline">Xem thư viện mẫu</button>
+                    <p class="text-sm text-gray-500 mt-2">Kho giao diện CV chuẩn ATS.</p>
                 </div>
-            </div>
-        </div>
-    </main>
-
-    <main id="recruiter-flow-page" class="page-section hidden bg-white min-h-screen">
-        <div class="max-w-xl mx-auto py-12 px-4">
-            <h2 class="text-3xl font-bold text-center text-blue-900 mb-2">Đăng ký Doanh Nghiệp</h2>
-            <div class="bg-yellow-50 border border-yellow-200 p-4 rounded mb-6 text-sm text-yellow-800">
-                <i class="fa-solid fa-triangle-exclamation mr-1"></i> <b>Quy trình xác thực:</b><br>
-                1. Xác thực Email doanh nghiệp.<br>
-                2. Hệ thống kiểm tra trùng khớp Tên Chủ Tài Khoản ngân hàng & Tên Đăng Ký.
-            </div>
-            
-            <div class="bg-white p-8 rounded-xl shadow-xl border border-gray-200 space-y-4">
-                <div>
-                    <label class="block font-bold text-sm mb-1">Tên Công Ty (Trên GPKD)</label>
-                    <input type="text" id="rec-company" class="w-full p-2 border rounded focus:border-primary uppercase font-bold" placeholder="VD: CÔNG TY CỔ PHẦN VINAMILK">
-                </div>
-                <div>
-                    <label class="block font-bold text-sm mb-1">Email Doanh Nghiệp</label>
-                    <input type="email" id="rec-email" class="w-full p-2 border rounded" placeholder="hr@vinamilk.com.vn">
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block font-bold text-sm mb-1">Tỉnh / Thành phố</label>
-                        <select id="rec-province" class="w-full p-2 border rounded" onchange="loadDistricts()">
-                            <option value="">Chọn Tỉnh/Thành</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block font-bold text-sm mb-1">Quận / Huyện</label>
-                        <select id="rec-district" class="w-full p-2 border rounded bg-gray-50" disabled>
-                            <option value="">Chọn Quận/Huyện</option>
-                        </select>
-                    </div>
-                </div>
-                <button onclick="handleRecruiterVerify()" class="w-full bg-blue-800 text-white font-bold py-3 rounded hover:bg-blue-900 transition mt-4">
-                    Tiếp tục: Xác thực Ngân hàng
-                </button>
             </div>
         </div>
     </main>
@@ -221,33 +184,47 @@
     <div id="auth-modal" class="fixed inset-0 bg-black/70 z-[100] hidden flex items-center justify-center backdrop-blur-sm">
         <div class="bg-white w-full max-w-lg rounded-xl overflow-hidden shadow-2xl relative animate-fadeIn">
             <button onclick="closeModal('auth-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-red-500"><i class="fa-solid fa-xmark fa-xl"></i></button>
+            
             <div class="flex border-b">
-                <button id="tab-login" onclick="switchAuthTab('login')" class="w-1/2 py-4 font-bold text-primary border-b-2 border-primary bg-blue-50">Đăng nhập</button>
-                <button id="tab-register" onclick="switchAuthTab('register')" class="w-1/2 py-4 font-bold text-gray-500 hover:bg-gray-50">Đăng ký</button>
+                <button id="tab-login" onclick="switchAuthTab('login')" class="w-1/3 py-4 font-bold text-primary border-b-2 border-primary bg-blue-50">Đăng nhập</button>
+                <button id="tab-register" onclick="switchAuthTab('register')" class="w-1/3 py-4 font-bold text-gray-500 hover:bg-gray-50">Đăng ký</button>
+                <button id="tab-recruiter" onclick="switchAuthTab('recruiter')" class="w-1/3 py-4 font-bold text-gray-500 hover:bg-gray-50 text-sm">Nhà tuyển dụng</button>
             </div>
+
             <div class="p-8">
-                <div id="form-login" class="space-y-3">
-                    <button class="w-full border py-2 rounded flex items-center justify-center gap-2 hover:bg-gray-50"><i class="fa-brands fa-google text-red-500"></i> Google</button>
-                    <button class="w-full border py-2 rounded flex items-center justify-center gap-2 hover:bg-gray-50"><i class="fa-brands fa-facebook text-blue-600"></i> Facebook</button>
-                    <div class="text-center text-xs text-gray-400">- HOẶC -</div>
-                    <input type="text" id="login-email" placeholder="Email / SĐT" class="w-full p-3 border rounded">
-                    <input type="password" id="login-pass" placeholder="Mật khẩu" class="w-full p-3 border rounded">
-                    <button onclick="handleLogin()" class="w-full bg-primary text-white font-bold py-3 rounded hover:bg-blue-800">Đăng nhập</button>
+                <div id="form-login">
+                    <div class="space-y-3">
+                        <button class="w-full border py-2 rounded flex items-center justify-center gap-2 hover:bg-gray-50 font-semibold text-sm"><i class="fa-brands fa-google text-red-500"></i> Google</button>
+                        <div class="text-center text-xs text-gray-400 my-2">- HOẶC -</div>
+                        <input type="text" id="login-email" placeholder="Email / SĐT" class="w-full p-3 border rounded text-sm">
+                        <input type="password" id="login-pass" placeholder="Mật khẩu" class="w-full p-3 border rounded text-sm">
+                        <button onclick="handleLogin()" class="w-full bg-primary text-white font-bold py-3 rounded hover:bg-blue-800 shadow-lg">Đăng nhập</button>
+                    </div>
                 </div>
+
                 <div id="form-register" class="hidden space-y-3">
-                    <input type="text" id="reg-name" placeholder="Họ và tên" class="w-full p-3 border rounded">
-                    <input type="text" id="reg-phone" placeholder="Số điện thoại (Sẽ nhận OTP)" class="w-full p-3 border rounded">
-                    <input type="email" id="reg-email" placeholder="Email" class="w-full p-3 border rounded">
-                    <input type="password" id="reg-pass" placeholder="Mật khẩu" class="w-full p-3 border rounded">
-                    <input type="password" id="reg-confirm" placeholder="Xác nhận mật khẩu" class="w-full p-3 border rounded">
-                    <div class="flex items-center gap-2 p-2 bg-gray-50 border rounded">
-                        <input type="checkbox" id="reg-captcha" class="w-5 h-5"> <span>I'm not a robot</span>
+                    <input type="text" id="reg-name" placeholder="Họ và tên" class="w-full p-3 border rounded text-sm">
+                    <input type="text" id="reg-phone" placeholder="Số điện thoại" class="w-full p-3 border rounded text-sm">
+                    <input type="email" id="reg-email" placeholder="Email" class="w-full p-3 border rounded text-sm">
+                    <input type="password" id="reg-pass" placeholder="Mật khẩu" class="w-full p-3 border rounded text-sm">
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 border rounded">
+                        <input type="checkbox" id="reg-captcha" class="custom-checkbox"> <span class="text-sm">I'm not a robot</span>
                     </div>
-                    <div class="flex items-start gap-2 text-sm text-gray-600">
-                        <input type="checkbox" id="reg-policy" class="custom-checkbox mt-1">
-                        <label for="reg-policy">Tôi đồng ý với <b>Chính sách xử lý dữ liệu</b> và Điều khoản sử dụng của TrustHire.</label>
+                    <div class="flex items-start gap-2 text-xs text-gray-500">
+                        <input type="checkbox" id="reg-policy" class="custom-checkbox mt-0.5"> <label for="reg-policy">Đồng ý <b class="text-primary">Chính sách dữ liệu</b>.</label>
                     </div>
-                    <button onclick="handleRegister()" class="w-full bg-secondary text-white font-bold py-3 rounded hover:bg-cyan-600">Đăng ký & Nhận OTP</button>
+                    <button onclick="handleRegister('candidate')" class="w-full bg-secondary text-white font-bold py-3 rounded hover:bg-cyan-600 shadow-lg">Đăng ký Ứng viên</button>
+                </div>
+
+                <div id="form-recruiter" class="hidden space-y-3">
+                    <div class="bg-yellow-50 text-yellow-800 p-2 text-xs rounded border border-yellow-200 mb-2">
+                        <i class="fa-solid fa-briefcase"></i> Đăng ký tài khoản Doanh nghiệp
+                    </div>
+                    <input type="text" id="rec-reg-company" placeholder="Tên Công Ty" class="w-full p-3 border rounded text-sm uppercase font-bold">
+                    <input type="email" id="rec-reg-email" placeholder="Email Doanh Nghiệp" class="w-full p-3 border rounded text-sm">
+                    <input type="text" id="rec-reg-phone" placeholder="Số điện thoại" class="w-full p-3 border rounded text-sm">
+                    <input type="password" id="rec-reg-pass" placeholder="Mật khẩu" class="w-full p-3 border rounded text-sm">
+                    <button onclick="handleRegister('recruiter')" class="w-full bg-blue-800 text-white font-bold py-3 rounded hover:bg-blue-900 shadow-lg">Đăng ký Nhà tuyển dụng</button>
                 </div>
             </div>
         </div>
@@ -256,113 +233,108 @@
     <div id="otp-modal" class="fixed inset-0 bg-black/80 z-[110] hidden flex items-center justify-center">
         <div class="bg-white w-full max-w-sm rounded-xl p-6 text-center animate-fadeIn relative">
             <button onclick="closeModal('otp-modal')" class="absolute top-2 right-2 text-gray-400"><i class="fa-solid fa-xmark"></i></button>
-            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fa-solid fa-mobile-screen-button text-2xl text-green-600"></i>
-            </div>
-            <h3 class="text-xl font-bold text-gray-800">Xác thực Số điện thoại</h3>
-            <p class="text-sm text-gray-500 mb-4">Mã OTP đã gửi đến <span id="otp-phone-display" class="font-bold text-gray-800">...</span></p>
-            <div class="flex justify-center gap-2 mb-4">
-                <input type="text" class="w-10 h-12 border rounded text-center text-xl font-bold focus:border-primary outline-none" maxlength="1">
-                <input type="text" class="w-10 h-12 border rounded text-center text-xl font-bold focus:border-primary outline-none" maxlength="1">
-                <input type="text" class="w-10 h-12 border rounded text-center text-xl font-bold focus:border-primary outline-none" maxlength="1">
-                <input type="text" class="w-10 h-12 border rounded text-center text-xl font-bold focus:border-primary outline-none" maxlength="1">
-                <input type="text" class="w-10 h-12 border rounded text-center text-xl font-bold focus:border-primary outline-none" maxlength="1">
-                <input type="text" class="w-10 h-12 border rounded text-center text-xl font-bold focus:border-primary outline-none" maxlength="1">
-            </div>
-            <button onclick="verifyOTP()" class="w-full bg-green-600 text-white font-bold py-3 rounded hover:bg-green-700">Xác nhận</button>
-            <p class="text-xs text-gray-400 mt-4 cursor-pointer hover:text-primary">Gửi lại mã?</p>
+            <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600 text-2xl"><i class="fa-solid fa-mobile-screen"></i></div>
+            <h3 class="text-xl font-bold text-gray-800">Xác thực SĐT</h3>
+            <p class="text-sm text-gray-500 mb-4">Nhập mã OTP gửi tới <b id="otp-phone-display">...</b></p>
+            <input type="text" placeholder="######" class="w-32 text-center text-2xl font-bold tracking-widest border-b-2 border-primary outline-none mb-4 p-2">
+            <button onclick="handleVerifyOTP()" class="w-full bg-green-600 text-white font-bold py-3 rounded hover:bg-green-700">Xác thực</button>
         </div>
     </div>
 
     <div id="kyc-modal" class="fixed inset-0 bg-black/80 z-[110] hidden flex items-center justify-center">
-        <div class="bg-white w-full max-w-md rounded-xl p-6 relative">
+        <div class="bg-white w-full max-w-md rounded-xl p-6 relative animate-fadeIn">
             <button onclick="closeModal('kyc-modal')" class="absolute top-2 right-2 text-gray-400"><i class="fa-solid fa-xmark"></i></button>
             <div class="text-center mb-6">
                 <i class="fa-solid fa-shield-halved text-5xl text-red-600 mb-2"></i>
-                <h3 class="text-xl font-bold text-gray-800">Xác minh Danh tính (Level 2)</h3>
-                <p class="text-sm text-gray-500">Kết nối CSDL Quốc gia về Dân cư</p>
+                <h3 class="text-xl font-bold text-gray-800">Xác thực Căn Cước (Level 2)</h3>
+                <p class="text-sm text-gray-500">Kết nối cơ sở dữ liệu quốc gia</p>
             </div>
-            <input type="text" id="kyc-cccd" placeholder="Số Căn cước công dân (12 số)" class="w-full p-3 border rounded text-center text-lg tracking-widest font-bold mb-4">
-            <button onclick="submitKYC()" class="w-full bg-red-600 text-white font-bold py-3 rounded hover:bg-red-700">Xác thực ngay</button>
+            <input type="text" id="kyc-cccd" placeholder="Nhập số CCCD (12 số)" class="w-full p-3 border rounded text-center text-lg tracking-widest font-bold mb-4 focus:border-red-500 outline-none">
+            <button onclick="submitKYC()" class="w-full bg-red-600 text-white font-bold py-3 rounded hover:bg-red-700 shadow-lg">Xác thực ngay</button>
         </div>
     </div>
 
     <script>
-        // --- 1. DATABASE & CONFIG ---
-        const provinces = ["Hà Nội", "Hồ Chí Minh", "Đà Nẵng", "Hải Phòng", "Cần Thơ", "Bình Dương", "Đồng Nai", "Bắc Ninh", "Vĩnh Phúc", "Nghệ An", "Thanh Hóa"]; // Demo rút gọn
-        const districts = { "Hà Nội": ["Cầu Giấy", "Ba Đình", "Hoàn Kiếm"], "Hồ Chí Minh": ["Quận 1", "Thủ Đức"] };
-
-        // Job DB (Bao gồm các job yêu cầu riêng)
+        // --- 1. MOCK DATA & CONFIG ---
+        const provinces = ["Hà Nội", "Hồ Chí Minh", "Đà Nẵng", "Hải Phòng", "Cần Thơ", "Bình Dương", "Đồng Nai", "Nghệ An", "Thanh Hóa", "Quảng Ninh"];
+        
+        // Danh sách Job (Bao gồm job "ma" part-time)
         const jobsDB = [
-            { id: 101, title: "Trợ giảng IELTS", company: "IELTS Fighter", salary: 8, loc: "Hà Nội", link: "#", tags: ["Tiếng Anh", "Giáo dục"] },
-            { id: 102, title: "Nhân viên Bán hàng", company: "Vinamilk", salary: 12, loc: "Hồ Chí Minh", link: "https://vinamilk.com.vn/tuyen-dung", tags: ["Bán hàng", "Full-time"] },
-            // Job Đặc biệt cho kịch bản
-            { 
-                id: 999, 
-                title: "Gia sư Tiếng Anh (Lớp 12)", 
-                company: "Trung tâm Gia sư Dương Thị Hạnh", 
-                salary: 20, 
-                loc: "Hà Nội", 
-                link: "https://www.facebook.com/share/p/17sSasrKKB/", 
-                tags: ["Gia sư", "Part-time"],
-                special: true 
-            },
-            { id: 3, title: "Kế toán Tổng hợp", company: "Techcombank", salary: 18, loc: "Hà Nội", link: "#", tags: ["Kế toán"] }
+            { id: 1, title: "Trợ giảng IELTS", company: "IELTS Fighter", salary: 8, loc: "Hà Nội", type: "Giáo dục", link: "https://ielts-fighter.com" },
+            { id: 5, title: "Kế toán Tổng hợp", company: "Techcombank", salary: 18, loc: "Hà Nội", type: "Kế toán", link: "#" },
+            
+            // Job "Ma" (Part-time từ nguồn ngoài)
+            { id: 3, title: "Nhân viên Phục vụ Part-time", company: "Pizza Hut", salary: 25, loc: "Hà Nội", type: "Part-time", link: "https://www.facebook.com/PizzaHutVN", isPartTime: true, source: "Facebook" },
+            { id: 4, title: "Nhân viên Pha chế", company: "Mixue", salary: 22, loc: "Hồ Chí Minh", type: "Part-time", link: "https://www.facebook.com/Mixue.Vietnam", isPartTime: true, source: "Facebook" },
+            { id: 6, title: "Phục vụ bàn Cafe", company: "Highlands Coffee", salary: 23, loc: "Đà Nẵng", type: "Part-time", link: "https://highlandscoffee.com.vn/vn/tuyen-dung.html", isPartTime: true, source: "Web" },
+
+            // Job Ẩn (Chỉ hiện khi AI gợi ý) - ĐÃ CẬP NHẬT LINK
+            { id: 999, title: "Gia sư Tiếng Anh (Lớp 12)", company: "TT Gia sư Dương Thị Hạnh", salary: 20, loc: "Hà Nội", type: "Gia sư", link: "https://www.facebook.com/share/p/17sSasrKKB/", special: true },
+            { id: 888, title: "Nhân viên Kinh doanh (Sales)", company: "Vinamilk CN Hồ Chí Minh", salary: 15, loc: "Hồ Chí Minh", type: "Sales", link: "https://www.facebook.com/share/p/1JrSBzp5h4/", special: true }
         ];
 
         let currentUser = null; 
-        let currentCVContext = null; // 'bach' hoặc 'thao'
+        let currentCVType = null;
 
         window.onload = function() {
             renderProvinces();
-            renderJobs(jobsDB.filter(j => !j.special)); // Mặc định ẩn job đặc biệt
-        }
+            renderJobs(jobsDB.filter(j => !j.special));
+        };
 
-        // --- 2. RENDER FUNCTIONS ---
         function renderProvinces() {
-            const selects = [document.getElementById('filter-location'), document.getElementById('rec-province')];
-            selects.forEach(sel => {
-                if(!sel) return;
-                provinces.forEach(p => {
-                    let opt = document.createElement('option'); opt.value = p; opt.innerText = p; sel.appendChild(opt);
-                });
-            });
-        }
-        function loadDistricts() {
-            const province = document.getElementById('rec-province').value;
-            const distSelect = document.getElementById('rec-district');
-            distSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
-            if(districts[province]) {
-                distSelect.disabled = false;
-                districts[province].forEach(d => {
-                    let opt = document.createElement('option'); opt.value = d; opt.innerText = d; distSelect.appendChild(opt);
-                });
-            }
+            const el = document.getElementById('filter-location');
+            if(el) provinces.forEach(p => { let opt = document.createElement('option'); opt.value = p; opt.innerText = p; el.appendChild(opt); });
         }
 
+        // --- 2. RENDER JOB LIST ---
         function renderJobs(list, containerId = 'main-job-list') {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
-            if(list.length === 0) return container.innerHTML = '<div class="text-center p-4">Không tìm thấy.</div>';
+            
+            if(list.length === 0) {
+                container.innerHTML = '<div class="text-center p-6 text-gray-500">Không tìm thấy công việc nào.</div>';
+                return;
+            }
 
             list.forEach(job => {
-                const isSpecial = job.special ? 'border-l-4 border-l-accent bg-yellow-50' : '';
+                const isSpecial = job.special ? 'border-2 border-accent bg-yellow-50' : 'border border-gray-100';
+                const tagColor = job.isPartTime ? 'bg-orange-100 text-orange-700' : 'bg-blue-50 text-blue-700';
+                
+                // Logic hiển thị cho Guest vs User
+                let salaryDisplay = `<span class="text-green-600 bg-green-50 px-2 py-1 rounded"><i class="fa-solid fa-money-bill-wave"></i> ${job.salary} Tr${job.isPartTime ? '/tháng' : ''}</span>`;
+                let btnText = "Ứng tuyển";
+                let btnAction = `handleJobClick('${job.link}', ${job.source ? true : false})`;
+
+                if (!currentUser) {
+                    // CHẾ ĐỘ GHOST: Che lương
+                    salaryDisplay = `<span class="blur-text bg-gray-200 px-2 py-1 rounded text-xs">Đăng nhập xem lương</span>`;
+                    btnText = "Đăng nhập để xem";
+                    btnAction = "openModal('auth-modal')";
+                } else if (job.source) {
+                    btnText = "Xem Link Gốc"; // Cho job ma
+                }
+
                 const html = `
-                    <div class="bg-white p-5 rounded-lg shadow border border-gray-100 hover:shadow-lg transition ${isSpecial} group">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="font-bold text-lg text-primary group-hover:underline"><a href="${job.link}" target="_blank">${job.title}</a></h3>
-                                <p class="font-bold text-gray-700 text-sm">${job.company} ${job.special ? '<i class="fa-solid fa-star text-accent"></i>' : ''}</p>
+                    <div class="bg-white p-5 rounded-lg shadow hover:shadow-lg transition ${isSpecial} group relative">
+                        ${job.source ? `<span class="absolute top-0 right-0 bg-gray-100 text-gray-500 text-[10px] font-bold px-2 py-1 rounded-bl">Nguồn: ${job.source}</span>` : ''}
+                        ${job.special ? '<div class="absolute top-0 right-0 bg-accent text-blue-900 text-xs font-bold px-2 py-1 rounded-bl">AI RECOMMENDED</div>' : ''}
+                        
+                        <div class="flex items-start justify-between">
+                            <div class="flex gap-4">
+                                <div class="w-12 h-12 bg-gray-100 rounded flex items-center justify-center font-bold text-gray-500 border">${job.company.substring(0,1)}</div>
+                                <div>
+                                    <h3 class="font-bold text-lg text-primary group-hover:underline cursor-pointer" onclick="${btnAction}">${job.title}</h3>
+                                    <p class="text-sm font-bold text-gray-600">${job.company}</p>
+                                </div>
                             </div>
-                            <div class="w-10 h-10 bg-gray-100 rounded flex items-center justify-center font-bold text-gray-500 border">${job.company.substring(0,1)}</div>
                         </div>
-                        <div class="flex gap-4 text-sm mt-3 text-gray-500">
-                            <span class="bg-green-50 text-green-700 px-2 py-1 rounded font-bold"><i class="fa-solid fa-money-bill"></i> ${job.salary} Tr</span>
+                        <div class="flex gap-3 text-sm mt-3 font-semibold text-gray-500">
+                            ${salaryDisplay}
                             <span><i class="fa-solid fa-location-dot"></i> ${job.loc}</span>
                         </div>
                         <div class="mt-4 pt-3 border-t flex justify-between items-center">
-                            <div class="flex gap-1">${job.tags.map(t=>`<span class="text-xs bg-gray-100 px-2 py-1 rounded">${t}</span>`).join('')}</div>
-                            <a href="${job.link}" target="_blank" class="text-sm font-bold text-secondary border border-secondary px-3 py-1 rounded hover:bg-secondary hover:text-white">Xem ngay</a>
+                            <span class="text-xs ${tagColor} px-2 py-1 rounded font-bold">${job.type}</span>
+                            <button onclick="${btnAction}" class="text-sm font-bold text-white bg-secondary px-4 py-1.5 rounded hover:bg-cyan-600 shadow">${btnText}</button>
                         </div>
                     </div>
                 `;
@@ -370,43 +342,82 @@
             });
         }
 
-        // --- 3. AUTH & OTP LOGIC ---
-        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        // --- 3. AUTH LOGIC ---
+        function openModal(id, tab = 'login') {
+            document.getElementById(id).classList.remove('hidden');
+            if(id === 'auth-modal') switchAuthTab(tab);
+        }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
-        function handleRegister() {
-            const name = document.getElementById('reg-name').value;
-            const phone = document.getElementById('reg-phone').value;
-            const policy = document.getElementById('reg-policy').checked;
+        function switchAuthTab(tab) {
+            document.getElementById('form-login').classList.toggle('hidden', tab !== 'login');
+            document.getElementById('form-register').classList.toggle('hidden', tab !== 'register');
+            document.getElementById('form-recruiter').classList.toggle('hidden', tab !== 'recruiter');
             
-            if(!name || !phone) return alert("Vui lòng nhập tên và SĐT!");
-            if(!policy) return alert("BẠN CHƯA ĐỒNG Ý VỚI CHÍNH SÁCH DỮ LIỆU!\nVui lòng tích vào ô đồng ý để tiếp tục.");
-
-            // Chuyển sang OTP
-            closeModal('auth-modal');
-            document.getElementById('otp-phone-display').innerText = phone;
-            openModal('otp-modal');
+            // Style Active Tab
+            const activeClass = "w-1/3 py-4 font-bold text-primary border-b-2 border-primary bg-blue-50 transition";
+            const inactiveClass = "w-1/3 py-4 font-bold text-gray-500 hover:bg-gray-50 transition";
             
-            // Lưu tạm
-            currentUser = { name: name, phone: phone, email: document.getElementById('reg-email').value, level: 1 };
+            document.getElementById('tab-login').className = tab === 'login' ? activeClass : inactiveClass;
+            document.getElementById('tab-register').className = tab === 'register' ? activeClass : inactiveClass;
+            document.getElementById('tab-recruiter').className = tab === 'recruiter' ? activeClass : inactiveClass;
         }
 
-        function verifyOTP() {
-            // Demo luôn đúng
-            alert("Xác thực OTP thành công! Thiết bị đã được ghi nhận.");
-            closeModal('otp-modal');
-            loginSuccess(currentUser);
-            // Check tài khoản test
-            if(currentUser.email === "quangthanh390@gmail.com") setTimeout(showKYC, 1000);
-        }
-
+        // LOGIN
         function handleLogin() {
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-pass').value;
-            if(email === "quangthanh390@gmail.com" && pass === "03092006") {
-                loginSuccess({ name: "Quang Thành", email: email, level: 1 });
+
+            // ADMIN CODE
+            if(email === 'quangthanh390@gmail.com' && pass === '03092006') {
+                loginSuccess({ name: "Quang Thành (Admin)", email: email, level: 1 });
             } else {
-                loginSuccess({ name: "User Demo", email: email, level: 1 });
+                loginSuccess({ name: "Người tìm việc", email: email, level: 1 });
+            }
+        }
+
+        // REGISTER (Candidate & Recruiter)
+        function handleRegister(type) {
+            if (type === 'candidate') {
+                const name = document.getElementById('reg-name').value;
+                const phone = document.getElementById('reg-phone').value;
+                const policy = document.getElementById('reg-policy').checked;
+                const captcha = document.getElementById('reg-captcha').checked;
+
+                if(!name || !phone) return alert("Vui lòng điền đủ thông tin!");
+                if(!captcha || !policy) return alert("Vui lòng xác nhận Captcha & Chính sách!");
+
+                // Chuyển sang OTP
+                currentUser = { name: name, email: document.getElementById('reg-email').value, level: 1 };
+                document.getElementById('otp-phone-display').innerText = phone;
+                closeModal('auth-modal');
+                openModal('otp-modal');
+            } 
+            else if (type === 'recruiter') {
+                const company = document.getElementById('rec-reg-company').value;
+                const email = document.getElementById('rec-reg-email').value;
+                
+                // Chặn Admin đăng ký Recruiter
+                if(currentUser && currentUser.email === 'quangthanh390@gmail.com') return alert("LỖI: Admin không thể đăng ký tài khoản này!");
+                
+                if(!company || !email) return alert("Vui lòng nhập tên Công ty & Email!");
+                alert(`Đăng ký thành công nhà tuyển dụng: ${company}.\nVui lòng chờ duyệt hồ sơ.`);
+                closeModal('auth-modal');
+            }
+        }
+
+        function handleVerifyOTP() {
+            alert("Xác thực SĐT thành công!");
+            closeModal('otp-modal');
+            loginSuccess(currentUser);
+            
+            if(currentUser.email === 'quangthanh390@gmail.com') {
+                setTimeout(showKYC, 1000); // Admin test nhanh
+            } else {
+                setTimeout(() => {
+                    alert("Thông báo bảo mật: Bạn đã online 5 phút. Vui lòng xác minh CCCD.");
+                    showKYC();
+                }, 5000); // Demo 5 giây
             }
         }
 
@@ -417,111 +428,123 @@
             document.getElementById('user-profile').classList.remove('hidden');
             document.getElementById('user-profile').classList.add('flex');
             updateUserDisplay();
+            renderJobs(jobsDB.filter(j => !j.special)); // Render lại để hiện lương
+        }
+
+        function logout() {
+            currentUser = null;
+            location.reload();
         }
 
         function updateUserDisplay() {
             document.getElementById('user-name-display').innerText = currentUser.name;
             const lvSpan = document.getElementById('user-level-display');
-            lvSpan.innerText = currentUser.level === 2 ? "Level 2: Đã xác thực" : "Level 1: Chưa xác thực";
+            lvSpan.innerText = currentUser.level === 2 ? "Level 2: Đã xác thực" : "Level 1: Basic";
             lvSpan.className = currentUser.level === 2 ? "text-xs font-bold text-green-600" : "text-xs font-bold text-gray-500";
         }
 
-        // --- 4. CV SIMULATION (THE CORE LOGIC) ---
-        function simulateUpload(type) {
-            currentCVContext = type;
-            alert(`Đang tải file lên Server...\nĐang phân tích OCR & AI Matching...`);
-            
-            setTimeout(() => {
-                switchPage('home');
-                const aiSection = document.getElementById('ai-results');
-                aiSection.classList.remove('hidden');
-                
-                if (type === 'bach') {
-                    // KỊCH BẢN NGUYỄN VĂN BÁCH (CV 1)
-                    document.getElementById('cv-name-analyzed').innerText = "Nguyễn Văn Bách (Giáo dục/IELTS)";
-                    // Đề xuất ban đầu: Trợ giảng
-                    renderJobs([jobsDB.find(j => j.id === 101)], 'ai-job-cards');
-                } else if (type === 'thao') {
-                    // KỊCH BẢN LÊ THỊ THẢO (CV 2)
-                    document.getElementById('cv-name-analyzed').innerText = "Lê Thị Thảo (Sales/Design)";
-                    // Đề xuất: Vinamilk
-                    renderJobs([jobsDB.find(j => j.id === 102)], 'ai-job-cards');
-                }
-            }, 1500);
+        // --- 4. KYC LOGIC ---
+        function showKYC() { openModal('kyc-modal'); }
+        function submitKYC() {
+            const cccd = document.getElementById('kyc-cccd').value;
+            if(currentUser && currentUser.email === 'quangthanh390@gmail.com') {
+                if(cccd === '0361812345678') {
+                    currentUser.level = 2;
+                    alert("Xác thực Admin thành công! Level 2 Unlocked.");
+                    closeModal('kyc-modal');
+                    updateUserDisplay();
+                } else alert("Sai mã CCCD Admin!");
+            } else {
+                if(cccd.length === 12) {
+                    currentUser.level = 2;
+                    alert("Xác thực thành công!");
+                    closeModal('kyc-modal');
+                    updateUserDisplay();
+                } else alert("Vui lòng nhập 12 số CCCD.");
+            }
         }
 
+        // --- 5. JOB CLICK & AI ---
+        function handleJobClick(link, isExternal) {
+            if (isExternal) {
+                window.open(link, '_blank');
+            } else {
+                if(currentUser.level === 2) alert("Đã gửi hồ sơ trực tiếp!");
+                else alert("Vui lòng xác minh Level 2 để ứng tuyển nhanh!");
+            }
+        }
+
+        // UPLOAD FILE & AI SCANNING
+        function handleFileUpload(input) {
+            if(input.files && input.files[0]) {
+                const fileName = input.files[0].name;
+                alert(`Đang tải file: ${fileName}...\nAI đang phân tích dữ liệu...`);
+                
+                setTimeout(() => {
+                    switchPage('home');
+                    const aiSection = document.getElementById('ai-results');
+                    aiSection.classList.remove('hidden');
+                    
+                    if(fileName.includes('Bach')) {
+                        // Kịch bản Bách -> Gia sư (Link mới Dương Thị Hạnh)
+                        document.getElementById('cv-analyzed-name').innerText = "Nguyễn Văn Bách";
+                        document.getElementById('ai-status-text').innerText = "Phù hợp nhất: Giáo dục / Gia sư";
+                        const matches = jobsDB.filter(j => j.id === 999);
+                        renderJobs(matches, 'ai-job-cards');
+                    } else if(fileName.includes('Thao')) {
+                        // Kịch bản Thảo -> Vinamilk (Link mới)
+                        document.getElementById('cv-analyzed-name').innerText = "Lê Thị Thảo";
+                        document.getElementById('ai-status-text').innerText = "Phù hợp nhất: Sales / Vinamilk";
+                        const matches = jobsDB.filter(j => j.id === 888);
+                        renderJobs(matches, 'ai-job-cards');
+                    } else {
+                        alert("AI: Không nhận diện được mẫu CV này. Đang hiển thị việc làm chung.");
+                    }
+                }, 1500);
+            }
+        }
+        
+        // Override AI bằng Input tay
         function handleUserDesireChange() {
             const input = document.getElementById('user-desire-input').value.toLowerCase();
             
-            if (currentCVContext === 'bach' && (input.includes('gia sư') || input.includes('dạy thêm'))) {
-                // LOGIC ĐẶC BIỆT: User Bách gõ "Gia sư" -> Hiện Link Facebook Dương Thị Hạnh
-                alert("AI: Đã cập nhật mong muốn 'Gia sư'. Đang tìm kiếm link phù hợp nhất...");
-                const specialJob = jobsDB.find(j => j.id === 999);
-                renderJobs([specialJob], 'ai-job-cards'); // Chỉ hiện job này ở phần AI
-            } else {
-                alert("AI: Đang tìm công việc '" + input + "'...");
-                // Filter demo thường
-                const results = jobsDB.filter(j => j.title.toLowerCase().includes(input));
-                renderJobs(results, 'ai-job-cards');
+            // Logic đặc biệt cho CV Bách + Input "Gia sư"
+            // Nếu người dùng Bách gõ "Gia sư", vẫn hiện link Dương Thị Hạnh
+            if(input.includes('gia sư') || input.includes('dạy thêm')) {
+                 const matches = jobsDB.filter(j => j.id === 999);
+                 if(matches.length > 0) {
+                     renderJobs(matches, 'ai-job-cards');
+                     return;
+                 }
             }
-        }
-
-        // --- 5. RECRUITER VERIFICATION ---
-        function handleRecruiterVerify() {
-            if(!currentUser) return alert("Vui lòng đăng nhập tài khoản cá nhân trước!");
-            const company = document.getElementById('rec-company').value;
-            const email = document.getElementById('rec-email').value;
-
-            // Check Email doanh nghiệp sơ sài
-            if(email.includes('@gmail.com') || email.includes('@yahoo.com')) {
-                return alert("Vui lòng sử dụng Email Doanh nghiệp (VD: hr@tencongty.com). Không dùng Gmail cá nhân.");
-            }
-
-            // Mô phỏng check ngân hàng
-            const confirmBank = confirm(`HỆ THỐNG KIỂM TRA NGÂN HÀNG:\n\nVui lòng chuyển khoản 10.000đ từ tài khoản công ty "${company}" đến số tài khoản TrustHire với nội dung xác thực.\n\nSau khi chuyển, hệ thống sẽ tự động đối chiếu Tên Chủ Tài Khoản.`);
             
-            if(confirmBank) {
-                alert("Đang chờ tín hiệu từ ngân hàng...");
-                setTimeout(() => {
-                    alert(`XÁC THỰC THÀNH CÔNG!\nTên chủ tài khoản khớp với "${company}".\nTài khoản của bạn đã được nâng cấp lên Nhà Tuyển Dụng.`);
-                }, 2000);
-            }
+            // Filter thường
+            const matches = jobsDB.filter(j => j.title.toLowerCase().includes(input));
+            renderJobs(matches, 'ai-job-cards');
         }
 
-        // --- 6. UTILS ---
+        // UTILS
         function switchPage(pageId) {
             document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active', 'hidden'));
             document.getElementById(pageId + '-page').classList.add('active');
             window.scrollTo(0,0);
         }
-        function switchAuthTab(type) {
-            document.getElementById('form-login').classList.toggle('hidden', type !== 'login');
-            document.getElementById('form-register').classList.toggle('hidden', type !== 'register');
-            // Style tab (rút gọn)
-            const activeClass = "w-1/2 py-4 font-bold text-primary border-b-2 border-primary bg-blue-50";
-            const inactiveClass = "w-1/2 py-4 font-bold text-gray-500 hover:bg-gray-50";
-            document.getElementById('tab-login').className = type === 'login' ? activeClass : inactiveClass;
-            document.getElementById('tab-register').className = type === 'register' ? activeClass : inactiveClass;
-        }
-        function closeAI() { document.getElementById('ai-results').classList.add('hidden'); }
 
-        // KYC Submit
-        function showKYC() { openModal('kyc-modal'); }
-        function submitKYC() {
-            const cccd = document.getElementById('kyc-cccd').value;
-            if(currentUser && currentUser.email === "quangthanh390@gmail.com") {
-                if(cccd === "0361812345678") {
-                    currentUser.level = 2;
-                    alert("Thành công! Level 2.");
-                    closeModal('kyc-modal');
-                    updateUserDisplay();
-                } else alert("CCCD Không đúng!");
-            } else {
-                currentUser.level = 2;
-                alert("Xác thực demo thành công.");
-                closeModal('kyc-modal');
-                updateUserDisplay();
-            }
+        function applyFilters() {
+            const keyword = document.getElementById('filter-keyword').value.toLowerCase();
+            const location = document.getElementById('filter-location').value;
+            const salary = document.getElementById('filter-salary').value;
+            
+            const filtered = jobsDB.filter(j => {
+                if(j.special) return false;
+                const matchKey = j.title.toLowerCase().includes(keyword) || j.company.toLowerCase().includes(keyword);
+                const matchLoc = location === "" || j.loc === location;
+                let matchSal = true;
+                if(salary === 'duoi-10') matchSal = j.salary < 10;
+                if(salary === '10-20') matchSal = j.salary >= 10 && j.salary <= 20;
+                return matchKey && matchLoc && matchSal;
+            });
+            renderJobs(filtered);
         }
     </script>
 </body>
